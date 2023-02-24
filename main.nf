@@ -1,17 +1,21 @@
 #!/usr/bin/env nextflow
 
 // Define input parameters
-params.inputFile = ''  // Path to input FASTA file
-params.cutoff = ''     // Sequence length cutoff
+params.inputFile = null // Path to input FASTA file
+params.cutoff = null    // Sequence length cutoff
+
+// Define command line parameters
+inputFileVal = file(args.inputFile)
+cutoffVal = args.cutoff.toInteger()
 
 // Check if input parameters have been provided
-if (!params.inputFile || !params.cutoff) {
+if (!inputFileVal || !cutoffVal) {
     println "Please provide inputFile and cutoff as parameters"
     System.exit(1)
 }
 
 // Create path channel to input FASTA file
-inputFasta = file(params.inputFile)
+inputFasta = file(inputFileVal)
 
 // Define process to filter sequences longer than cutoff
 process filterSequences {
@@ -25,12 +29,11 @@ process filterSequences {
     script:
         """
         #!/usr/bin/env python3
-        import sys
         from Bio import SeqIO
 
-        # Get input parameters from command line
-        fasta_file = sys.argv[1]
-        cutoff = int(sys.argv[2])
+        # Get input parameters from Nextflow
+        fasta_file = '${inputFasta}'
+        cutoff = ${cutoff}
 
         # Iterate over input sequences
         with open(fasta_file, 'r') as f:
@@ -45,5 +48,5 @@ process filterSequences {
 
 // Define a workflow that includes the process
 workflow {
-    filterSequences(inputFasta, params.cutoff)
+    filterSequences(inputFasta, cutoffVal)
 }
