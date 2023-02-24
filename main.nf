@@ -31,11 +31,8 @@ process filterSequences {
         #!/usr/bin/env python3
         from Bio import SeqIO
 
-        # Get input parameters from Nextflow
         fasta_file = '${inputFasta}'
         cutoff = "${cutoff}"
-
-
         # Iterate over input sequences
         with open(fasta_file, 'r') as f:
             for record in SeqIO.parse(f, 'fasta'):
