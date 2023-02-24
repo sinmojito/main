@@ -33,7 +33,7 @@ process filterSequences {
             for record in SeqIO.parse(f, 'fasta'):
                 # Write sequences longer than cutoff to output file
                 if len(record.seq) > cutoff:
-                    with open('output.txt', 'a') as out:
+                    with open('output.fasta', 'a') as out:
                         out.write(f'>{record.id}\\n{record.seq}\\n')
         """
 }
