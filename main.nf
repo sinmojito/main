@@ -16,7 +16,7 @@ process filterSequences {
     val cutoff
 
     output:
-    path "output.txt"
+    path "output.fasta"
 
     script:
         """
